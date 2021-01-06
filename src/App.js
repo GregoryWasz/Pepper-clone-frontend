@@ -18,8 +18,8 @@ import PostSearchBox from "./components/PostSearchBox";
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: "#111", light: "#222" },
-    secondary: { main: "#222", light: "#333" },
+    primary: { main: "#111" },
+    secondary: { main: "#ff7900" },
     background: {
       default: "#e9eaed",
     },
