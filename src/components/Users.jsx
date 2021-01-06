@@ -24,7 +24,7 @@ const Users = () => {
       {users.map((user) => {
         const { username, email } = user;
         return (
-          <Paper key={{ username }} className={classes.root}>
+          <Paper key={username} className={classes.root}>
             <h3>User: {username} </h3>
             <h4>Email: {email} </h4>
           </Paper>
