@@ -1,10 +1,30 @@
+import { Button, makeStyles, Paper, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import axios from "../service/axios";
+import Register from "./Register";
+
+const useStyles = makeStyles({
+  root: {
+    padding: "1rem",
+    margin: "0.5rem",
+  },
+  textField: { margin: "0.4rem" },
+  button: {
+    color: "#fff",
+    fontWeight: "bold",
+    textTransform: "none",
+    margin: "0.4rem",
+    display: "flex",
+    alignItems: "center",
+    justifyItems: "center",
+  },
+});
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const classes = useStyles();
+
   const handleLogin = (e) => {
     e.preventDefault();
     if (username && password) {
@@ -16,11 +36,9 @@ export default function Login() {
         .post("/login", loginDTO)
         .then((response) => {
           console.log(response);
-          setMessage("Successfully logged IN");
         })
         .catch((error) => {
           console.log(error);
-          setMessage("Bad login creds");
         });
 
       setUsername("");
@@ -32,28 +50,40 @@ export default function Login() {
 
   return (
     <>
-      {message}
-      <form>
-        <div>
-          <label>Username: </label>
-          <input
-            type="text"
+      <Paper className={classes.root}>
+        <h3>Login form</h3>
+        <form>
+          <TextField
+            className={classes.textField}
+            size="small"
             id="username"
-            name="username"
+            type="text"
+            label="Username"
+            variant="outlined"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-          ></input>
-          <label>Password: </label>
-          <input
-            type="text"
+          />
+          <TextField
+            className={classes.textField}
+            size="small"
             id="password"
-            name="password"
+            type="password"
+            label="Password"
+            variant="outlined"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          ></input>
-          <button onClick={handleLogin}>login</button>
-        </div>
-      </form>
+          />
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleLogin}
+            className={classes.button}
+          >
+            Log in
+          </Button>
+        </form>
+      </Paper>
+      <Register></Register>
     </>
   );
 }
