@@ -1,5 +1,6 @@
 import { Button, makeStyles, Paper, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "./UserContext";
 import axios from "../service/axios";
 import { Link } from "react-router-dom";
 const useStyles = makeStyles({
@@ -22,30 +23,30 @@ const useStyles = makeStyles({
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { setIsLoggedIn, getCookieValue, isLoggedIn } = useContext(UserContext);
   const classes = useStyles();
 
-  const handleLogin = (e) => {
+  async function handleLogin(e) {
     e.preventDefault();
-    if (username && password) {
-      const loginDTO = { username, password };
-      console.log(username + " " + password);
-      console.log(loginDTO);
+    const loginDto = { username, password };
 
-      axios
-        .post("/login", loginDTO)
-        .then((response) => {
-          console.log(response);
+    if (!isLoggedIn) {
+      await axios
+        .post("/login", loginDto)
+        .then(() => {
+          setIsLoggedIn(true);
+          getCookieValue();
         })
         .catch((error) => {
           console.log(error);
         });
-
-      setUsername("");
-      setPassword("");
     } else {
-      console.log("Empty Values");
+      console.log("You already logged in!");
     }
-  };
+
+    setUsername("");
+    setPassword("");
+  }
 
   return (
     <>

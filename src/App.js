@@ -7,6 +7,7 @@ import PostDetails from "./components/PostDetails";
 import Role from "./components/Role";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { useState, useEffect } from "react";
 import {
   Container,
   createMuiTheme,
@@ -16,7 +17,9 @@ import {
 } from "@material-ui/core";
 import PostSearchBox from "./components/PostSearchBox";
 import Register from "./components/Register";
-
+import { UserContext } from "./components/UserContext";
+import Cookies from "js-cookie";
+import axios from "./service/axios";
 const theme = createMuiTheme({
   palette: {
     primary: { main: "#111" },
@@ -28,42 +31,76 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUsername, setCurrentUsername] = useState("");
+  const [currentUserId, setCurrentUserId] = useState("");
+
+  async function getCookieValue() {
+    await axios.get("/users/currentuser").then((response) => {
+      setCurrentUserId(response.data.userId);
+      setCurrentUsername(response.data.username);
+    });
+  }
+
+  useEffect(() => {
+    if (Cookies.get("JSESSIONID")) {
+      setIsLoggedIn(true);
+      getCookieValue();
+    } else {
+      setIsLoggedIn(false);
+      setCurrentUserId("");
+      setCurrentUsername("");
+    }
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <Header />
-        <Container fixed>
-          <Grid container>
-            <Grid item xs={12} md={9}>
-              <Switch>
-                <Route exact path="/">
-                  <Home />
-                </Route>
-                <Route path="/users">
-                  <Users />
-                </Route>
-                <Route path="/login">
-                  <Login />
-                </Route>
-                <Route path="/posts/:id">
-                  <PostDetails />
-                </Route>
-                <Route path="/role">
-                  <Role />
-                </Route>
-                <Route path="/register">
-                  <Register />
-                </Route>
-              </Switch>
+      <UserContext.Provider
+        value={{
+          isLoggedIn,
+          setIsLoggedIn,
+          currentUserId,
+          setCurrentUserId,
+          currentUsername,
+          setCurrentUsername,
+          getCookieValue,
+        }}
+      >
+        <CssBaseline />
+        <Router>
+          <Header />
+          <Container fixed>
+            <Grid container>
+              <Grid item xs={12} md={9}>
+                <Switch>
+                  <Route exact path="/">
+                    <Home />
+                  </Route>
+                  <Route path="/users">
+                    <Users />
+                  </Route>
+                  <Route path="/login">
+                    <Login />
+                  </Route>
+                  <Route path="/posts/:id">
+                    <PostDetails />
+                  </Route>
+                  <Route path="/role">
+                    <Role />
+                  </Route>
+                  <Route path="/register">
+                    <Register />
+                  </Route>
+                </Switch>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <PostSearchBox />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={3}>
-              <PostSearchBox />
-            </Grid>
-          </Grid>
-        </Container>
-        <Footer />
-      </Router>
+          </Container>
+          <Footer />
+        </Router>
+      </UserContext.Provider>
     </ThemeProvider>
   );
 }
