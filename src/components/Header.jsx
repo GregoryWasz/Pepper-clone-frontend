@@ -8,6 +8,8 @@ import AddIcon from "@material-ui/icons/Add";
 import { Link } from "react-router-dom";
 import PersonIcon from "@material-ui/icons/Person";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import WhatshotIcon from "@material-ui/icons/Whatshot";
+import axios from "../service/axios";
 
 const useStyles = makeStyles({
   header: { backgroundColor: "#34383b" },
@@ -41,9 +43,13 @@ const useStyles = makeStyles({
     },
   },
 });
+async function handleLogout() {
+  await axios.get("logout");
+}
 
 function Header() {
   const classes = useStyles();
+
   return (
     <div className={classes.root} s>
       <AppBar position="static" className={classes.header}>
@@ -51,6 +57,7 @@ function Header() {
           <Container fixed>
             <Grid container alignItems="center">
               <Grid item component={Link} to={"/"} className={classes.logo}>
+                <WhatshotIcon />
                 SUPER LOGO
               </Grid>
               <Grid
@@ -87,8 +94,7 @@ function Header() {
                 <Button
                   className={classes.login}
                   size="medium"
-                  component={Link}
-                  to={"/logout"}
+                  onClick={handleLogout}
                 >
                   <Icon>
                     <ExitToAppIcon></ExitToAppIcon>

@@ -1,8 +1,7 @@
 import { Button, makeStyles, Paper, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import axios from "../service/axios";
-import Register from "./Register";
-
+import { Link } from "react-router-dom";
 const useStyles = makeStyles({
   root: {
     padding: "1rem",
@@ -81,9 +80,17 @@ export default function Login() {
           >
             Log in
           </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            component={Link}
+            to="/register"
+          >
+            I need account!
+          </Button>
         </form>
       </Paper>
-      <Register></Register>
     </>
   );
 }

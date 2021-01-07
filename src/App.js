@@ -15,6 +15,7 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import PostSearchBox from "./components/PostSearchBox";
+import Register from "./components/Register";
 
 const theme = createMuiTheme({
   palette: {
@@ -50,6 +51,9 @@ function App() {
                 </Route>
                 <Route path="/role">
                   <Role />
+                </Route>
+                <Route path="/register">
+                  <Register />
                 </Route>
               </Switch>
             </Grid>

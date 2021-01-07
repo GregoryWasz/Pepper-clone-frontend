@@ -1,6 +1,7 @@
 import { Button, makeStyles, Paper, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import axios from "../service/axios";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -91,6 +92,15 @@ function Register() {
             className={classes.button}
           >
             Register for free!
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            component={Link}
+            to={"/login"}
+          >
+            I already have account
           </Button>
         </form>
       </Paper>

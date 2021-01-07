@@ -5,8 +5,10 @@ export default function Role() {
   const [roles, setRoles] = useState([]);
 
   async function getRoles() {
-    const roles = await axios.get("roles", { withCredentials: true });
-    setRoles(roles.data);
+    const roles = await axios
+      .get("roles", { withCredentials: true })
+      .then(setRoles(roles.data))
+      .catch(console.log("Bad Kitty!"));
     return roles;
   }
 
