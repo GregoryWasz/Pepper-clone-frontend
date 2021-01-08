@@ -1,6 +1,7 @@
-import { Card, InputBase, makeStyles } from "@material-ui/core";
-import React from "react";
-import SearchIcon from "@material-ui/icons/Search";
+import { Card, makeStyles, TextField, Typography } from "@material-ui/core";
+import React, { useState } from "react";
+import axios from "../service/axios";
+import PersonIcon from "@material-ui/icons/Person";
 
 const useStyles = makeStyles({
   search: {
@@ -11,10 +12,8 @@ const useStyles = makeStyles({
     textAlign: "center",
     alignItems: "center",
     padding: "0.5rem",
-    minHeight: "17.5rem",
   },
   searchInput: {
-    borderRadius: "0.5rem",
     "&:hover": {
       backgroundColor: "#f2f2f2",
     },
@@ -22,26 +21,86 @@ const useStyles = makeStyles({
 });
 
 function PostSearchBox() {
+  const [users, setUsers] = useState([]);
+  const [posts, setPosts] = useState([]);
+
+  function getPostsAndUsers(e) {
+    setUsers([]);
+    setPosts([]);
+
+    console.log(e.target.value);
+
+    axios
+      .get("/posts/search", {
+        params: {
+          q: e.target.value,
+        },
+      })
+      .then((response) => {
+        setPosts(response.data);
+        if (e.target.value === "") {
+          setPosts([]);
+        }
+      })
+      .catch((error) => {
+        console.log("Bad Kitty!");
+      });
+
+    axios
+      .get("/users/search", {
+        params: {
+          q: e.target.value,
+        },
+      })
+      .then((response) => {
+        setUsers(response.data);
+        if (e.target.value === "") {
+          setUsers([]);
+        }
+      })
+      .catch((error) => {
+        console.log("Bad Kitty!");
+      });
+  }
+
   const classes = useStyles();
   return (
     <>
       <Card className={classes.search}>
-        <div>Find post:</div>
-        <InputBase
+        <TextField
           className={classes.searchInput}
-          placeholder="Search..."
-          inputProps={{ "aria-label": "search" }}
-          startAdornment={<SearchIcon fontSize="small" />}
+          label="Search"
+          variant="filled"
+          onChange={getPostsAndUsers}
         />
-      </Card>
-      <Card className={classes.search}>
-        <div>Find User</div>
-        <InputBase
-          className={classes.searchInput}
-          placeholder="Search..."
-          inputProps={{ "aria-label": "search" }}
-          startAdornment={<SearchIcon fontSize="small" />}
-        />
+        {users.length > 0 && <Typography>Finded users:</Typography>}
+        {users.map((user) => {
+          return (
+            <Card
+              variant="outlined"
+              className={classes.search}
+              key={user.username}
+            >
+              <Typography>
+                <PersonIcon />
+                {user.username}
+              </Typography>
+            </Card>
+          );
+        })}
+
+        {posts.length > 0 && <Typography>Finded posts:</Typography>}
+        {posts.map((post) => {
+          return (
+            <Card
+              variant="outlined"
+              className={classes.search}
+              key={post.postId}
+            >
+              <Typography>{post.title}</Typography>
+            </Card>
+          );
+        })}
       </Card>
     </>
   );

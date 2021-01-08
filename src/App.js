@@ -1,10 +1,8 @@
 import "./App.css";
-import Users from "./components/Users";
 import Login from "./components/Login";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./components/Home";
 import PostDetails from "./components/PostDetails";
-import Role from "./components/Role";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { useState, useEffect } from "react";
@@ -76,17 +74,11 @@ function App() {
                   <Route exact path="/">
                     <Home />
                   </Route>
-                  <Route path="/users">
-                    <Users />
-                  </Route>
                   <Route path="/login">
                     <Login />
                   </Route>
                   <Route path="/posts/:id">
                     <PostDetails />
-                  </Route>
-                  <Route path="/role">
-                    <Role />
                   </Route>
                   <Route path="/register">
                     <Register />

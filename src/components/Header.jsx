@@ -65,7 +65,7 @@ function Header() {
   } = useContext(UserContext);
 
   return (
-    <div className={classes.root} s>
+    <div className={classes.root}>
       <AppBar position="static" className={classes.header}>
         <Toolbar>
           <Container fixed>
@@ -73,22 +73,6 @@ function Header() {
               <Grid item component={Link} to={"/"} className={classes.logo}>
                 <WhatshotIcon />
                 SUPER LOGO
-              </Grid>
-              <Grid
-                item
-                component={Link}
-                to={"/users"}
-                className={classes.logo}
-              >
-                Our Team
-              </Grid>
-              <Grid
-                item
-                component={Link}
-                to={"/roles"}
-                className={classes.logo}
-              >
-                Roles
               </Grid>
               <Grid item xs></Grid>
               {isLoggedIn ? (
