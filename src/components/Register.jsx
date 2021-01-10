@@ -1,7 +1,7 @@
 import { Button, makeStyles, Paper, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import axios from "../service/axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -25,6 +25,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const classes = useStyles();
+  const history = useHistory();
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -37,6 +38,7 @@ function Register() {
         .post("/users/register", registerDTO)
         .then((response) => {
           console.log(response);
+          history.push("/login");
         })
         .catch((error) => {
           console.log(error);

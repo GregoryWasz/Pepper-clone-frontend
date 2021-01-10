@@ -3,6 +3,7 @@ import React, { useState, useContext } from "react";
 import { UserContext } from "./UserContext";
 import axios from "../service/axios";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles({
   root: {
     padding: "1rem",
@@ -25,6 +26,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const { setIsLoggedIn, getCookieValue, isLoggedIn } = useContext(UserContext);
   const classes = useStyles();
+  let history = useHistory();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -36,6 +38,7 @@ export default function Login() {
         .then(() => {
           setIsLoggedIn(true);
           getCookieValue();
+          history.push("/");
         })
         .catch((error) => {
           console.log(error);
