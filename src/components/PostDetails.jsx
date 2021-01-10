@@ -18,12 +18,13 @@ export default function PostDetails() {
     console.log(commentDto);
     await axios
       .post("/comments", commentDto)
-      .then(() => {})
+      .then(async () => {
+        const newcomments = await axios.get("comments/" + id);
+        setComments(newcomments.data);
+      })
       .catch((error) => {
-        console.log(error);
+        console.log("Bad Kitty!" + error);
       });
-    const newcomments = await axios.get("comments/" + id);
-    setComments(newcomments.data);
   }
 
   useEffect(() => {
