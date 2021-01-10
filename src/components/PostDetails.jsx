@@ -1,11 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "../service/axios";
 import { useParams } from "react-router-dom";
+import { Button, FormControl, TextField } from "@material-ui/core";
+import { UserContext } from "./UserContext";
 
 export default function PostDetails() {
   const { id } = useParams();
   const [post, setPost] = useState([]);
   const [comments, setComments] = useState([]);
+  const [content, setContent] = useState("");
+  const { isLoggedIn } = useContext(UserContext);
+
+  async function handleAddComment(e) {
+    e.preventDefault();
+    const postId = id;
+    const commentDto = { content, postId };
+    console.log(commentDto);
+    await axios
+      .post("/comments", commentDto)
+      .then(() => {})
+      .catch((error) => {
+        console.log(error);
+      });
+    const newcomments = await axios.get("comments/" + id);
+    setComments(newcomments.data);
+  }
 
   useEffect(() => {
     async function getPost() {
@@ -33,8 +52,26 @@ export default function PostDetails() {
       <ul>
         <h3>Comments:</h3>
         {comments.map((comment) => {
-          return <li>{comment.content}</li>;
+          return (
+            <li key={comment.commentId}>
+              {comment.content} by {comment.userId}
+            </li>
+          );
         })}
+        {isLoggedIn ? (
+          <ul>
+            <h3>Add comment:</h3>
+            <FormControl>
+              <TextField
+                variant="outlined"
+                onChange={(e) => setContent(e.target.value)}
+              ></TextField>
+              <Button onClick={handleAddComment}>Add comment!</Button>
+            </FormControl>
+          </ul>
+        ) : (
+          <h3>Login to add comment.</h3>
+        )}
       </ul>
     </div>
   );
