@@ -18,6 +18,8 @@ import Register from "./components/Register";
 import { UserContext } from "./components/UserContext";
 import Cookies from "js-cookie";
 import axios from "./service/axios";
+import MyAccount from "./components/MyAccount";
+import UserProfile from "./components/UserProfile";
 const theme = createMuiTheme({
   palette: {
     primary: { main: "#111" },
@@ -82,6 +84,12 @@ function App() {
                   </Route>
                   <Route path="/register">
                     <Register />
+                  </Route>
+                  <Route path="/myaccount">
+                    <MyAccount />
+                  </Route>
+                  <Route path="/profile/:id">
+                    <UserProfile />
                   </Route>
                 </Switch>
               </Grid>
