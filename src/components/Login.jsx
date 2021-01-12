@@ -1,4 +1,10 @@
-import { Button, makeStyles, Paper, TextField } from "@material-ui/core";
+import {
+  Button,
+  makeStyles,
+  Paper,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import React, { useState, useContext } from "react";
 import { UserContext } from "./UserContext";
 import axios from "../service/axios";
@@ -8,6 +14,8 @@ const useStyles = makeStyles({
   root: {
     padding: "1rem",
     margin: "0.5rem",
+    justifyContent: "center",
+    display: "flex",
   },
   textField: { margin: "0.4rem" },
   button: {
@@ -38,7 +46,7 @@ export default function Login() {
         .then(() => {
           setIsLoggedIn(true);
           getCookieValue();
-          history.push("/");
+          history.goBack();
         })
         .catch((error) => {
           console.log(error);
@@ -54,8 +62,10 @@ export default function Login() {
   return (
     <>
       <Paper className={classes.root}>
-        <h3>Login form</h3>
         <form>
+          <Typography align="center" variant="h4">
+            Login form
+          </Typography>
           <TextField
             className={classes.textField}
             size="small"
@@ -63,6 +73,7 @@ export default function Login() {
             type="text"
             label="Username"
             variant="outlined"
+            fullWidth={true}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -73,6 +84,7 @@ export default function Login() {
             type="password"
             label="Password"
             variant="outlined"
+            fullWidth={true}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -81,6 +93,7 @@ export default function Login() {
             color="secondary"
             onClick={handleLogin}
             className={classes.button}
+            fullWidth={true}
           >
             Log in
           </Button>
@@ -90,6 +103,7 @@ export default function Login() {
             className={classes.button}
             component={Link}
             to="/register"
+            fullWidth={true}
           >
             I need account!
           </Button>

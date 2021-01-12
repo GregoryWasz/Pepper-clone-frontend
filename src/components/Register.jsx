@@ -1,4 +1,10 @@
-import { Button, makeStyles, Paper, TextField } from "@material-ui/core";
+import {
+  Button,
+  makeStyles,
+  Paper,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import React, { useState } from "react";
 import axios from "../service/axios";
 import { Link, useHistory } from "react-router-dom";
@@ -7,6 +13,8 @@ const useStyles = makeStyles({
   root: {
     padding: "1rem",
     margin: "0.5rem",
+    justifyContent: "center",
+    display: "flex",
   },
   textField: { margin: "0.4rem" },
   button: {
@@ -55,8 +63,10 @@ function Register() {
   return (
     <>
       <Paper className={classes.root}>
-        <h3>You don't have account?</h3>
         <form>
+          <Typography align="center" variant="h4">
+            You don't have account?
+          </Typography>
           <TextField
             className={classes.textField}
             size="small"
@@ -64,6 +74,7 @@ function Register() {
             type="text"
             label="Username"
             variant="outlined"
+            fullWidth={true}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -74,6 +85,7 @@ function Register() {
             type="email"
             label="Email"
             variant="outlined"
+            fullWidth={true}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -84,12 +96,14 @@ function Register() {
             type="password"
             label="Password"
             variant="outlined"
+            fullWidth={true}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button
             variant="contained"
             color="secondary"
+            fullWidth={true}
             onClick={handleRegister}
             className={classes.button}
           >
@@ -98,6 +112,7 @@ function Register() {
           <Button
             variant="contained"
             color="secondary"
+            fullWidth={true}
             className={classes.button}
             component={Link}
             to={"/login"}

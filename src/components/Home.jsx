@@ -5,12 +5,15 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "./UserContext";
 import { Link } from "react-router-dom";
 import axios from "../service/axios";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles({
   banner: {
@@ -53,22 +56,32 @@ const useStyles = makeStyles({
     alignItems: "center",
     display: "flex",
   },
-  priceBefore: { fontWeight: "bold" },
+  priceBefore: { color: "#c4c4c4", textDecoration: "line-through" },
   priceAfter: {
-    color: "#c4c4c4",
-    textDecoration: "line-through",
+    fontWeight: "bold",
   },
   author: {},
 });
 
 const Home = () => {
-  const [posts, setposts] = useState([]);
+  const [posts, setPosts] = useState([]);
   const classes = useStyles();
+  const { currentUsername } = useContext(UserContext);
+
+  async function handleDeletePost(PostId) {
+    await axios
+      .delete("/posts/" + PostId)
+      .then(async () => {
+        getPosts();
+      })
+      .catch((error) => {
+        console.log("Bad Kitty!" + error);
+      });
+  }
 
   async function getPosts() {
     const posts = await axios.get("posts");
-    setposts(posts.data);
-    return posts;
+    setPosts(posts.data);
   }
 
   useEffect(() => {
@@ -88,7 +101,7 @@ const Home = () => {
           priceAfter,
           // votes,
           //active,
-          userId,
+          username,
         } = post;
 
         return (
@@ -103,17 +116,17 @@ const Home = () => {
               </Typography>
               <Typography className={classes.content}>{content}</Typography>
               <Typography
-                className={classes.priceBefore}
+                className={classes.priceAfter}
                 style={{ display: "inline-block" }}
                 color="secondary"
               >
-                {priceBefore + "zł "}&nbsp;
+                {" " + priceAfter} zł&nbsp;
               </Typography>
               <Typography
-                className={classes.priceAfter}
+                className={classes.priceBefore}
                 style={{ display: "inline-block" }}
               >
-                {" " + priceAfter} zł
+                {priceBefore + "zł "}
               </Typography>
               <Typography className={classes.postDate}>
                 <WhatshotIcon size="small" />
@@ -121,7 +134,7 @@ const Home = () => {
               </Typography>
               {/* <Typography className={classes.votes}>Votes: {votes}</Typography> */}
               <Typography className={classes.author}>
-                Author: {userId}
+                Author: {username}
               </Typography>
               <Button
                 to={`/posts/${postId}`}
@@ -131,13 +144,30 @@ const Home = () => {
               >
                 <ChatBubbleIcon></ChatBubbleIcon>
               </Button>
-              <Button
-                to={`/posts/${postId}`}
-                component={Link}
-                className={classes.dealButton}
-              >
+              <Button href={post.dealLink} className={classes.dealButton}>
                 Get Deal! <ExitToAppIcon />
               </Button>
+              {username === currentUsername && (
+                <>
+                  <Button
+                    onClick={() => {
+                      //setIsChangeFormVisible(true);
+                      //setCurrentCommentId(postId);
+                    }}
+                  >
+                    {" "}
+                    <EditIcon />{" "}
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      handleDeletePost(postId);
+                    }}
+                  >
+                    {" "}
+                    <DeleteForeverIcon />{" "}
+                  </Button>
+                </>
+              )}
             </CardContent>
           </Card>
         );
