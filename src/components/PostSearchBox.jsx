@@ -2,6 +2,7 @@ import { Card, makeStyles, TextField, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import axios from "../service/axios";
 import PersonIcon from "@material-ui/icons/Person";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   search: {
@@ -79,9 +80,9 @@ function PostSearchBox() {
             <Card
               variant="outlined"
               className={classes.search}
-              key={user.username}
+              key={user.userId}
             >
-              <Typography>
+              <Typography component={Link} to={"/profile/" + user.userId}>
                 <PersonIcon />
                 {user.username}
               </Typography>
@@ -97,7 +98,9 @@ function PostSearchBox() {
               className={classes.search}
               key={post.postId}
             >
-              <Typography>{post.title}</Typography>
+              <Typography component={Link} to={"/posts/" + post.postId}>
+                {post.title}
+              </Typography>
             </Card>
           );
         })}
