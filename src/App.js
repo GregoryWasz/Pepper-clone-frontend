@@ -20,6 +20,7 @@ import Cookies from "js-cookie";
 import axios from "./service/axios";
 import MyAccount from "./components/MyAccount";
 import UserProfile from "./components/UserProfile";
+import AddPost from "./components/AddPost";
 const theme = createMuiTheme({
   palette: {
     primary: { main: "#111" },
@@ -81,6 +82,9 @@ function App() {
                   </Route>
                   <Route path="/posts/:id">
                     <PostDetails />
+                  </Route>
+                  <Route path="/create">
+                    <AddPost />
                   </Route>
                   <Route path="/register">
                     <Register />

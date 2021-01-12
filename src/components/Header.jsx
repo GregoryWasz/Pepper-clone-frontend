@@ -5,7 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
 import { Button, Container, Icon } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import PersonIcon from "@material-ui/icons/Person";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
@@ -48,12 +48,15 @@ const useStyles = makeStyles({
 
 function Header() {
   async function handleLogout() {
-    await axios.get("logout");
-    setIsLoggedIn(false);
-    setCurrentUserId("");
-    setCurrentUsername("");
+    await axios.get("logout").then(() => {
+      setIsLoggedIn(false);
+      setCurrentUserId("");
+      setCurrentUsername("");
+      history.push("/");
+    });
   }
 
+  const history = useHistory();
   const classes = useStyles();
   const {
     isLoggedIn,
@@ -76,18 +79,30 @@ function Header() {
               </Grid>
               <Grid item xs></Grid>
               {isLoggedIn ? (
-                <Grid item>
-                  <Button
-                    className={classes.login}
-                    size="medium"
-                    onClick={handleLogout}
-                  >
-                    <Icon>
-                      <ExitToAppIcon></ExitToAppIcon>
-                    </Icon>
-                    Logout, {currentUsername + " " + currentUserId}
-                  </Button>
-                </Grid>
+                <>
+                  <Grid item>
+                    <Button
+                      className={classes.login}
+                      size="medium"
+                      component={Link}
+                      to="/myaccount"
+                    >
+                      Hello, {currentUsername + " " + currentUserId}
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      className={classes.login}
+                      size="medium"
+                      onClick={handleLogout}
+                    >
+                      <Icon>
+                        <ExitToAppIcon></ExitToAppIcon>
+                      </Icon>
+                      Logout
+                    </Button>
+                  </Grid>
+                </>
               ) : (
                 <Grid item>
                   <Button
@@ -104,7 +119,12 @@ function Header() {
                 </Grid>
               )}
               <Grid item>
-                <Button className={classes.submit} size="medium">
+                <Button
+                  className={classes.submit}
+                  size="medium"
+                  component={Link}
+                  to="/create"
+                >
                   <Icon>
                     <AddIcon></AddIcon>
                   </Icon>
