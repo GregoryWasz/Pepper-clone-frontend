@@ -1,5 +1,6 @@
-import { makeStyles, Paper, Typography } from "@material-ui/core";
+import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
 import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "../service/axios";
 import { UserContext } from "./UserContext";
 
@@ -10,9 +11,25 @@ const useStyles = makeStyles({
   },
 });
 function MyAccount() {
-  const { currentUserId } = useContext(UserContext);
+  const {
+    currentUserId,
+    setCurrentUserId,
+    setCurrentUsername,
+    setIsLoggedIn,
+  } = useContext(UserContext);
   const [user, setUser] = useState([]);
+  const history = useHistory();
   const classes = useStyles();
+
+  async function handleDeleteAccount() {
+    await axios.delete("users/").then(async () => {
+      setIsLoggedIn(false);
+      setCurrentUserId("");
+      setCurrentUsername("");
+      history.push("/");
+    });
+  }
+
   useEffect(() => {
     async function getCurrentUser() {
       const user = await axios.get("users/" + currentUserId).then();
@@ -26,11 +43,11 @@ function MyAccount() {
       <Typography> Hello {user.username}</Typography>
 
       <Typography>Your user pannel:</Typography>
-
+      <Button onClick={handleDeleteAccount}> Delete Account</Button>
       {/* <Button> Change Email</Button>
       <Button> Change Username</Button>
       <Button> Change Password</Button>
-      <Button> Delete Account</Button> */}
+      */}
     </Paper>
   );
 }
