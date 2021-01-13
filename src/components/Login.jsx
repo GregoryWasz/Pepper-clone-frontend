@@ -46,7 +46,7 @@ export default function Login() {
         .then(() => {
           setIsLoggedIn(true);
           getCookieValue();
-          history.goBack();
+          history.push("/");
         })
         .catch((error) => {
           console.log(error);
