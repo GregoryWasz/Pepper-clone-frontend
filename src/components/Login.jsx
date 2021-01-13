@@ -64,7 +64,7 @@ export default function Login() {
       <Paper className={classes.root}>
         <form>
           <Typography align="center" variant="h4">
-            Login form
+            Login
           </Typography>
           <TextField
             className={classes.textField}

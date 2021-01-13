@@ -21,6 +21,7 @@ import axios from "./service/axios";
 import MyAccount from "./components/MyAccount";
 import UserProfile from "./components/UserProfile";
 import AddPost from "./components/AddPost";
+import EditPost from "./components/EditPost";
 const theme = createMuiTheme({
   palette: {
     primary: { main: "#111" },
@@ -80,8 +81,11 @@ function App() {
                   <Route path="/login">
                     <Login />
                   </Route>
-                  <Route path="/posts/:id">
+                  <Route exact path="/posts/:id">
                     <PostDetails />
+                  </Route>
+                  <Route path="/edit/post/:id">
+                    <EditPost />
                   </Route>
                   <Route path="/create">
                     <AddPost />

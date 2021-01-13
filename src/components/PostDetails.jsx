@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "../service/axios";
-import { useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { Button, FormControl, TextField } from "@material-ui/core";
 import { UserContext } from "./UserContext";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -10,10 +10,24 @@ export default function PostDetails() {
   const { id } = useParams();
   const [post, setPost] = useState([]);
   const [comments, setComments] = useState([]);
-  const [content, setContent] = useState("");
-  const { isLoggedIn, currentUsername } = useContext(UserContext);
+  const { isLoggedIn, currentUsername, currentUserId } = useContext(
+    UserContext
+  );
   const [isChangeFormVisible, setIsChangeFormVisible] = useState(false);
   const [currentCommentId, setCurrentCommentId] = useState("");
+  const history = useHistory();
+  const [content, setContent] = useState("");
+
+  async function handleDeletePost(PostId) {
+    await axios
+      .delete("/posts/" + PostId)
+      .then(async () => {
+        history.goBack();
+      })
+      .catch((error) => {
+        console.log("Bad Kitty!" + error);
+      });
+  }
 
   async function handleAddComment(e) {
     e.preventDefault();
@@ -26,6 +40,7 @@ export default function PostDetails() {
       .then(async () => {
         const newcomments = await axios.get("comments/" + id);
         setComments(newcomments.data);
+        setContent("");
       })
       .catch((error) => {
         console.log("Bad Kitty!" + error);
@@ -82,6 +97,22 @@ export default function PostDetails() {
         <li>Price before= {post.priceBefore}</li>
         <li>Price after = {post.priceAfter}</li>
         <li>Link = {post.dealLink}</li>
+        {post.userId === currentUserId && (
+          <li>
+            <Button component={Link} to={"/edit/post/" + id}>
+              {" "}
+              <EditIcon />{" "}
+            </Button>
+            <Button
+              onClick={() => {
+                handleDeletePost(post.postId);
+              }}
+            >
+              {" "}
+              <DeleteForeverIcon />{" "}
+            </Button>
+          </li>
+        )}
       </ul>
       <ul>
         <h3>Comments:</h3>

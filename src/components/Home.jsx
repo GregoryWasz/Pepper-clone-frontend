@@ -5,15 +5,12 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "./UserContext";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "../service/axios";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles({
   banner: {
@@ -66,18 +63,6 @@ const useStyles = makeStyles({
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const classes = useStyles();
-  const { currentUsername } = useContext(UserContext);
-
-  async function handleDeletePost(PostId) {
-    await axios
-      .delete("/posts/" + PostId)
-      .then(async () => {
-        getPosts();
-      })
-      .catch((error) => {
-        console.log("Bad Kitty!" + error);
-      });
-  }
 
   async function getPosts() {
     const posts = await axios.get("posts");
@@ -147,27 +132,6 @@ const Home = () => {
               <Button href={post.dealLink} className={classes.dealButton}>
                 Get Deal! <ExitToAppIcon />
               </Button>
-              {username === currentUsername && (
-                <>
-                  <Button
-                    onClick={() => {
-                      //setIsChangeFormVisible(true);
-                      //setCurrentCommentId(postId);
-                    }}
-                  >
-                    {" "}
-                    <EditIcon />{" "}
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleDeletePost(postId);
-                    }}
-                  >
-                    {" "}
-                    <DeleteForeverIcon />{" "}
-                  </Button>
-                </>
-              )}
             </CardContent>
           </Card>
         );
