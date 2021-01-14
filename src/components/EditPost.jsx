@@ -1,8 +1,19 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button, makeStyles, Paper, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import axios from "../service/axios";
 
+const useStyle = makeStyles({
+  paper: {
+    padding: "1rem",
+    marginTop: "0.5rem",
+    marginBottom: "0.5rem",
+    marginLeft: "0.25rem",
+    marginRight: "0.25rem",
+  },
+  text: { margin: "0.5rem" },
+  button: { marginLeft: "0.5rem", color: "white", backgroundColor: "#ff7900" },
+});
 export default function EditPost() {
   const { id } = useParams();
   const history = useHistory();
@@ -13,7 +24,7 @@ export default function EditPost() {
   const [dealLink, setDealLink] = useState("");
   const [active, setActive] = useState(true);
   const [tagId, setTagId] = useState("1");
-
+  const classes = useStyle();
   async function handleUpdatePost() {
     await axios
       .put("/posts/" + id, {
@@ -43,8 +54,9 @@ export default function EditPost() {
     getPost();
   }, [id]);
   return (
-    <>
+    <Paper className={classes.paper}>
       <TextField
+        className={classes.text}
         variant="outlined"
         value={title}
         label="Title"
@@ -54,6 +66,7 @@ export default function EditPost() {
         onChange={(e) => setTitle(e.target.value)}
       />
       <TextField
+        className={classes.text}
         variant="outlined"
         value={content}
         label="Description"
@@ -63,6 +76,7 @@ export default function EditPost() {
         onChange={(e) => setContent(e.target.value)}
       />
       <TextField
+        className={classes.text}
         variant="outlined"
         value={priceBefore}
         label="Old price"
@@ -70,26 +84,36 @@ export default function EditPost() {
         onChange={(e) => setPriceBefore(e.target.value)}
       />
       <TextField
+        className={classes.text}
         variant="outlined"
         value={priceAfter}
         label="Price now"
         type="number"
         onChange={(e) => setPriceAfter(e.target.value)}
       />
-      <TextField
-        variant="outlined"
-        value={dealLink}
-        label="Link to deal"
-        type="text"
-        onChange={(e) => setDealLink(e.target.value)}
-      />
-      <Button
-        onClick={() => {
-          handleUpdatePost();
-        }}
-      >
-        Accept
-      </Button>
-    </>
+      <div>
+        <TextField
+          className={classes.text}
+          variant="outlined"
+          value={dealLink}
+          label="Link to deal"
+          type="text"
+          onChange={(e) => setDealLink(e.target.value)}
+          fullWidth={true}
+          multiline={true}
+        />
+      </div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Button
+          className={classes.button}
+          size="large"
+          onClick={() => {
+            handleUpdatePost();
+          }}
+        >
+          Accept
+        </Button>
+      </div>
+    </Paper>
   );
 }

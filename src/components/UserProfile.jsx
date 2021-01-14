@@ -1,13 +1,17 @@
-import { makeStyles, Paper } from "@material-ui/core";
+import { makeStyles, Paper, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../service/axios";
 
 const useStyles = makeStyles({
   root: {
-    padding: "1rem",
     margin: "0.5rem",
+    padding: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
+  text: { margin: "0.5rem" },
 });
 function UserProfile() {
   const { id } = useParams();
@@ -23,8 +27,12 @@ function UserProfile() {
 
   return (
     <Paper className={classes.root}>
-      <h3>Profile: {user.username}</h3>
-      <h4>Email: {user.email}</h4>
+      <Typography className={classes.text} variant="h4">
+        Profile: {user.username}
+      </Typography>
+      <Typography className={classes.text} variant="h5">
+        Email: {user.email}
+      </Typography>
     </Paper>
   );
 }

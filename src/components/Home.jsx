@@ -10,9 +10,12 @@ import { Link } from "react-router-dom";
 import axios from "../service/axios";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
-import WhatshotIcon from "@material-ui/icons/Whatshot";
+import ScheduleIcon from "@material-ui/icons/Schedule";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles({
+  row: { display: "flex" },
+  column: { width: "50%", wordWrap: "break-word" },
   banner: {
     marginTop: "0.5rem",
     marginBottom: "0.5rem",
@@ -57,7 +60,20 @@ const useStyles = makeStyles({
   priceAfter: {
     fontWeight: "bold",
   },
-  author: {},
+  author: {
+    fontSize: "13px",
+    fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
+  },
+  avatar: {
+    width: "30px",
+    height: "30px",
+    fontSize: "13px",
+    textTransform: "uppercase",
+    color: "white",
+    backgroundColor: "#ff7900",
+  },
 });
 
 const Home = () => {
@@ -92,14 +108,33 @@ const Home = () => {
         return (
           <Card className={classes.card} key={postId}>
             <CardContent>
-              <Typography
-                className={classes.title}
-                to={`/posts/${postId}`}
-                component={Link}
-              >
-                {title}
+              <div className={classes.row}>
+                <div style={{ width: "70%" }}>
+                  <Typography
+                    className={classes.title}
+                    to={`/posts/${postId}`}
+                    component={Link}
+                    variant="h4"
+                  >
+                    {title}
+                  </Typography>
+                </div>
+                <div
+                  style={{
+                    width: "30%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Typography className={classes.postDate}>
+                    <ScheduleIcon size="small" />
+                    {postDate.split("T")[0]}
+                  </Typography>
+                </div>
+              </div>
+              <Typography className={classes.content} variant="h5">
+                {content}
               </Typography>
-              <Typography className={classes.content}>{content}</Typography>
               <Typography
                 className={classes.priceAfter}
                 style={{ display: "inline-block" }}
@@ -113,25 +148,38 @@ const Home = () => {
               >
                 {priceBefore + "zł "}
               </Typography>
-              <Typography className={classes.postDate}>
-                <WhatshotIcon size="small" />
-                {postDate.split("T")[0]}
-              </Typography>
               {/* <Typography className={classes.votes}>Votes: {votes}</Typography> */}
-              <Typography className={classes.author}>
-                Author: {username}
-              </Typography>
-              <Button
-                to={`/posts/${postId}`}
-                component={Link}
-                className={classes.commentsButton}
-                variant="outlined"
-              >
-                <ChatBubbleIcon></ChatBubbleIcon>
-              </Button>
-              <Button href={post.dealLink} className={classes.dealButton}>
-                Get Deal! <ExitToAppIcon />
-              </Button>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ width: "50%" }}>
+                  <Typography className={classes.author}>
+                    <Avatar className={classes.avatar}>
+                      {username[0]}
+                      {username[1]}
+                    </Avatar>{" "}
+                    &nbsp;
+                    {username}
+                  </Typography>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    width: "50%",
+                  }}
+                >
+                  <Button
+                    to={`/posts/${postId}`}
+                    component={Link}
+                    className={classes.commentsButton}
+                    variant="outlined"
+                  >
+                    <ChatBubbleIcon></ChatBubbleIcon>
+                  </Button>
+                  <Button href={post.dealLink} className={classes.dealButton}>
+                    Get Deal! <ExitToAppIcon />
+                  </Button>
+                </div>
+              </div>
             </CardContent>
           </Card>
         );

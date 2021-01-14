@@ -19,9 +19,6 @@ const useStyles = makeStyles({
     fontWeight: "bold",
     textTransform: "none",
     margin: "0.4rem",
-    display: "flex",
-    alignItems: "center",
-    justifyItems: "center",
   },
 });
 
@@ -101,6 +98,8 @@ function AddPost() {
             type="text"
             onChange={(e) => setDealLink(e.target.value)}
             value={dealLink}
+            fullWidth={true}
+            multiline={true}
           ></TextField>
         </div>
         <Button

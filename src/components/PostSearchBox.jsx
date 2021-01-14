@@ -1,8 +1,9 @@
 import { Card, makeStyles, TextField, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import axios from "../service/axios";
-import PersonIcon from "@material-ui/icons/Person";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 import { Link } from "react-router-dom";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles({
   search: {
@@ -10,14 +11,45 @@ const useStyles = makeStyles({
     marginBottom: "0.5rem",
     marginLeft: "0.25rem",
     marginRight: "0.25rem",
-    textAlign: "center",
-    alignItems: "center",
     padding: "0.5rem",
+    textAlign: "center",
   },
   searchInput: {
     "&:hover": {
       backgroundColor: "#f2f2f2",
     },
+  },
+  searchResult: {
+    marginTop: "0.5rem",
+    marginBottom: "0.5rem",
+    marginLeft: "0.25rem",
+    marginRight: "0.25rem",
+    padding: "0.5rem",
+  },
+  searchLabel: {
+    marginTop: "0.5rem",
+    marginBottom: "0.5rem",
+    marginLeft: "0.25rem",
+    marginRight: "0.25rem",
+    padding: "0.5rem",
+    backgroundColor: "#34383b",
+    color: "white",
+  },
+  typo: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textDecoration: "none",
+    color: "Black",
+  },
+  avatar: {
+    width: "25px",
+    height: "25px",
+    fontSize: "9px",
+    textTransform: "uppercase",
+    fontWeight: "bold",
+    color: "white",
+    backgroundColor: "#ff7900",
   },
 });
 
@@ -68,37 +100,61 @@ function PostSearchBox() {
   return (
     <>
       <Card className={classes.search}>
+        <Card variant="outlined" className={classes.searchLabel}>
+          Search:
+        </Card>
         <TextField
           className={classes.searchInput}
-          label="Search"
-          variant="filled"
+          label="Find users and posts!"
+          variant="outlined"
           onChange={getPostsAndUsers}
         />
-        {users.length > 0 && <Typography>Finded users:</Typography>}
+
+        {users.length > 0 && (
+          <Card variant="outlined" className={classes.searchLabel}>
+            Finded users:
+          </Card>
+        )}
         {users.map((user) => {
           return (
             <Card
+              className={classes.searchResult}
               variant="outlined"
-              className={classes.search}
               key={user.userId}
             >
-              <Typography component={Link} to={"/profile/" + user.userId}>
-                <PersonIcon />
-                {user.username}
+              <Typography
+                className={classes.typo}
+                component={Link}
+                to={"/profile/" + user.userId}
+              >
+                <Avatar className={classes.avatar}>
+                  {user.username[0]}
+                  {user.username[1]}
+                </Avatar>
+                &nbsp; {user.username}
               </Typography>
             </Card>
           );
         })}
 
-        {posts.length > 0 && <Typography>Finded posts:</Typography>}
+        {posts.length > 0 && (
+          <Card variant="outlined" className={classes.searchLabel}>
+            Finded posts:
+          </Card>
+        )}
         {posts.map((post) => {
           return (
             <Card
               variant="outlined"
-              className={classes.search}
+              className={classes.searchResult}
               key={post.postId}
             >
-              <Typography component={Link} to={"/posts/" + post.postId}>
+              <Typography
+                className={classes.typo}
+                component={Link}
+                to={"/posts/" + post.postId}
+              >
+                <AssignmentIcon />
                 {post.title}
               </Typography>
             </Card>
