@@ -87,12 +87,14 @@ const useStyles = makeStyles({
 export default function PostDetails() {
   const { id } = useParams();
   const [post, setPost] = useState([]);
+  const [date, setDate] = useState(["ATA"]);
   const [comments, setComments] = useState([]);
   const { isLoggedIn, currentUsername, currentUserId } = useContext(
     UserContext
   );
   const [isChangeFormVisible, setIsChangeFormVisible] = useState(false);
   const [currentCommentId, setCurrentCommentId] = useState("");
+  const [currentCommentContent, setCurrentCommentContent] = useState("");
   const history = useHistory();
   const [content, setContent] = useState("");
   const classes = useStyles();
@@ -139,6 +141,7 @@ export default function PostDetails() {
   }
 
   async function handleUpdateComment(commentId) {
+    const content = currentCommentContent;
     await axios
       .put("/comments/" + commentId, { content })
       .then(async () => {
@@ -156,6 +159,7 @@ export default function PostDetails() {
     async function getPost() {
       const post = await axios.get("posts/" + id);
       setPost(post.data);
+      setDate(post.data.postDate.split("T")[0]);
     }
     async function getComments() {
       const comments = await axios.get("comments/" + id);
@@ -177,7 +181,7 @@ export default function PostDetails() {
           <div className={classes.column} style={{ textAlign: "right" }}>
             <Typography className={classes.postDate}>
               <ScheduleIcon /> &nbsp;
-              {post.postDate}
+              {date}
             </Typography>
           </div>
         </div>
@@ -262,6 +266,7 @@ export default function PostDetails() {
                         onClick={() => {
                           setIsChangeFormVisible(true);
                           setCurrentCommentId(comment.commentId);
+                          setCurrentCommentContent(comment.content);
                         }}
                       >
                         {" "}
@@ -288,7 +293,8 @@ export default function PostDetails() {
               multiline={true}
               fullWidth={true}
               label="Edit Comment"
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(e) => setCurrentCommentContent(e.target.value)}
+              value={currentCommentContent}
             ></TextField>
             <Button
               className={classes.addCommentButton}
@@ -311,6 +317,7 @@ export default function PostDetails() {
                 fullWidth={true}
                 label="Add Comment"
                 onChange={(e) => setContent(e.target.value)}
+                value={content}
               ></TextField>
               <Button
                 className={classes.addCommentButton}
