@@ -91,7 +91,6 @@ const Home = () => {
 
   return (
     <>
-      <Card className={classes.banner}>Lastest:</Card>
       {posts.map((post) => {
         const {
           postId,

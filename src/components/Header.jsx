@@ -19,6 +19,8 @@ const useStyles = makeStyles({
     backgroundColor: "#ff7900",
     color: "white",
     fontWeight: "bold",
+    marginTop: "0.5rem",
+    marginBottom: "0.5rem",
     textTransform: "none",
     "&:hover": {
       backgroundColor: "#ff7900",
@@ -38,8 +40,14 @@ const useStyles = makeStyles({
 
   logo: {
     color: "#fff",
+    fontWeight: "bold",
     textDecoration: "none",
-    padding: "1.3rem",
+    paddingTop: "1.3rem",
+    paddingBottom: "1.3rem",
+    paddingLeft: "0.2rem",
+    paddingRight: "0.2rem",
+    display: "flex",
+    alignItems: "center",
     "&:hover": {
       backgroundColor: "#575757",
     },
@@ -61,7 +69,6 @@ function Header() {
   const {
     isLoggedIn,
     setIsLoggedIn,
-    currentUserId,
     setCurrentUserId,
     currentUsername,
     setCurrentUsername,
@@ -74,8 +81,8 @@ function Header() {
           <Container fixed>
             <Grid container alignItems="center">
               <Grid item component={Link} to={"/"} className={classes.logo}>
-                <WhatshotIcon />
-                SUPER LOGO
+                <WhatshotIcon style={{ color: "#ff7900" }} />
+                GW DEALS
               </Grid>
               <Grid item xs></Grid>
               {isLoggedIn ? (
@@ -87,7 +94,7 @@ function Header() {
                       component={Link}
                       to="/myaccount"
                     >
-                      Hello, {currentUsername + " " + currentUserId}
+                      Hello, {currentUsername}
                     </Button>
                   </Grid>
                   <Grid item>
