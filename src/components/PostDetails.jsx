@@ -13,6 +13,7 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import EditIcon from "@material-ui/icons/Edit";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ScheduleIcon from "@material-ui/icons/Schedule";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles({
   paper: {
@@ -83,6 +84,7 @@ const useStyles = makeStyles({
     },
   },
   commentContent: {},
+  alert: { margin: "0.25rem" },
 });
 export default function PostDetails() {
   const { id } = useParams();
@@ -98,6 +100,7 @@ export default function PostDetails() {
   const history = useHistory();
   const [content, setContent] = useState("");
   const classes = useStyles();
+  const [isError, setIsError] = useState(false);
 
   async function handleDeletePost(PostId) {
     await axios
@@ -105,8 +108,8 @@ export default function PostDetails() {
       .then(async () => {
         history.goBack();
       })
-      .catch((error) => {
-        console.log("Bad Kitty!" + error);
+      .catch(() => {
+        setIsError(true);
       });
   }
 
@@ -119,12 +122,13 @@ export default function PostDetails() {
     await axios
       .post("/comments", commentDto)
       .then(async () => {
+        setIsError(false);
         const newcomments = await axios.get("comments/" + id);
         setComments(newcomments.data);
         setContent("");
       })
-      .catch((error) => {
-        console.log("Bad Kitty!" + error);
+      .catch(() => {
+        setIsError(true);
       });
   }
 
@@ -145,13 +149,14 @@ export default function PostDetails() {
     await axios
       .put("/comments/" + commentId, { content })
       .then(async () => {
+        setIsError(false);
         const newcomments = await axios.get("comments/" + id);
         setIsChangeFormVisible(false);
         setContent("");
         setComments(newcomments.data);
       })
       .catch((error) => {
-        console.log("Bad Kitty!" + error);
+        setIsError(true);
       });
   }
 
@@ -286,6 +291,11 @@ export default function PostDetails() {
             </Paper>
           );
         })}
+        {isError && (
+          <Alert className={classes.alert} severity="error">
+            Comment must contain message!
+          </Alert>
+        )}
         {isChangeFormVisible && (
           <Paper className={classes.paper} variant="outlined">
             <TextField

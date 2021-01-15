@@ -8,6 +8,7 @@ import {
 import React, { useState } from "react";
 import axios from "../service/axios";
 import { Link, useHistory } from "react-router-dom";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles({
   root: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles({
     alignItems: "center",
     justifyItems: "center",
   },
+  alert: { margin: "0.5rem" },
 });
 
 function Register() {
@@ -34,34 +36,38 @@ function Register() {
   const [email, setEmail] = useState("");
   const classes = useStyles();
   const history = useHistory();
+  const [isError, setIsError] = useState(false);
 
-  const handleRegister = (e) => {
+  async function handleRegister(e) {
     e.preventDefault();
     if (username && password && email) {
       const registerDTO = { username, password, email };
       console.log(username + " " + password + " " + email);
       console.log(registerDTO);
 
-      axios
+      await axios
         .post("/users/register", registerDTO)
         .then((response) => {
           console.log(response);
           history.push("/login");
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(() => {});
 
       setUsername("");
       setPassword("");
       setPassword("");
     } else {
-      console.log("Empty Values");
+      setIsError(true);
     }
-  };
+  }
 
   return (
     <>
+      {isError && (
+        <Alert className={classes.alert} severity="error">
+          Bad Credentials
+        </Alert>
+      )}
       <Paper className={classes.root}>
         <form>
           <Typography align="center" variant="h4">

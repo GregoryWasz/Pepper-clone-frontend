@@ -10,6 +10,8 @@ import { UserContext } from "./UserContext";
 import axios from "../service/axios";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { Alert } from "@material-ui/lab";
+
 const useStyles = makeStyles({
   root: {
     padding: "1rem",
@@ -27,12 +29,14 @@ const useStyles = makeStyles({
     alignItems: "center",
     justifyItems: "center",
   },
+  alert: { margin: "0.5rem" },
 });
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { setIsLoggedIn, getCookieValue, isLoggedIn } = useContext(UserContext);
+  const [isError, setIsError] = useState(false);
   const classes = useStyles();
   let history = useHistory();
 
@@ -48,8 +52,8 @@ export default function Login() {
           getCookieValue();
           history.push("/");
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          setIsError(true);
         });
     } else {
       console.log("You already logged in!");
@@ -61,11 +65,18 @@ export default function Login() {
 
   return (
     <>
+      {isError && (
+        <Alert className={classes.alert} severity="error">
+          Bad Credentials
+        </Alert>
+      )}
+
       <Paper className={classes.root}>
         <form>
           <Typography align="center" variant="h4">
             Login
           </Typography>
+
           <TextField
             className={classes.textField}
             size="small"

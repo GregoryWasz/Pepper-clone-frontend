@@ -8,6 +8,8 @@ import {
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "../service/axios";
+import { Alert } from "@material-ui/lab";
+
 const useStyles = makeStyles({
   root: {
     padding: "1rem",
@@ -20,6 +22,7 @@ const useStyles = makeStyles({
     textTransform: "none",
     margin: "0.4rem",
   },
+  alert: { margin: "0.5rem" },
 });
 
 function AddPost() {
@@ -31,6 +34,7 @@ function AddPost() {
   const [dealLink, setDealLink] = useState("");
   const [tagId, setTagId] = useState("1");
   const history = useHistory();
+  const [isError, setIsError] = useState(false);
 
   async function handleAddPost() {
     setTagId("1");
@@ -47,11 +51,18 @@ function AddPost() {
       .then((response) => {
         history.push("/posts/" + response.data.postId);
       })
-      .catch();
+      .catch(() => {
+        setIsError(true);
+      });
   }
 
   return (
     <>
+      {isError && (
+        <Alert className={classes.alert} severity="error">
+          Fill properly all fields!
+        </Alert>
+      )}
       <Paper className={classes.root}>
         <Typography variant="h4">Create new deal!</Typography>
         <TextField

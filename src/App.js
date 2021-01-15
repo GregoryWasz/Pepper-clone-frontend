@@ -22,6 +22,7 @@ import MyAccount from "./components/MyAccount";
 import UserProfile from "./components/UserProfile";
 import AddPost from "./components/AddPost";
 import EditPost from "./components/EditPost";
+
 const theme = createMuiTheme({
   palette: {
     primary: { main: "#111" },
@@ -99,6 +100,7 @@ function App() {
                   <Route path="/profile/:id">
                     <UserProfile />
                   </Route>
+                  <Route path="/*">Site not exist</Route>
                 </Switch>
               </Grid>
               <Grid item xs={12} md={3}>
