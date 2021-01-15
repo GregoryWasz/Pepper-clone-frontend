@@ -44,6 +44,7 @@ const useStyles = makeStyles({
     textDecoration: "line-through",
   },
   dealButton: {
+    marginRight: "0.25rem",
     color: "white",
     width: "30%",
     backgroundColor: "#ff7900",
