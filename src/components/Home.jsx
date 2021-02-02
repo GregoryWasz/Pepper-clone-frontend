@@ -12,6 +12,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import Avatar from "@material-ui/core/Avatar";
+import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles({
   row: { display: "flex" },
@@ -78,16 +79,29 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const classes = useStyles();
 
+  const handleChange = (event, value) => {
+    value = value - 1;
+    setCurrentPage(value);
+  };
+
   async function getPosts() {
-    const posts = await axios.get("posts");
-    setPosts(posts.data);
+    await axios
+      .get("posts/page/", {
+        params: { page: currentPage },
+      })
+      .then((posts) => {
+        setTotalPages(posts.data.totalPages);
+        setPosts(posts.data.content);
+      });
   }
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [currentPage]);
 
   return (
     <>
@@ -183,6 +197,17 @@ const Home = () => {
           </Card>
         );
       })}
+      <Card
+        className={classes.card}
+        style={{ display: "flex", justifyContent: "center" }}
+      >
+        <Pagination
+          count={totalPages}
+          color="primary"
+          shape="rounded"
+          onChange={handleChange}
+        />
+      </Card>
     </>
   );
 };
