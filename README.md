@@ -1,3 +1,9 @@
+# Pepper clone frontend
+My attempt to clone polish site with deals: [pepper](https://www.pepper.pl).
+
+Frontend technology stack: Javascript, React, Material-UI.
+# Backend for aplication [here](https://github.com/GregoryWasz/Pepper-clone-backend).
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
